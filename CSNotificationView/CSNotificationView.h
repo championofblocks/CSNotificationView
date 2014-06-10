@@ -41,6 +41,13 @@ typedef void(^CSVoidBlock)();
                      message:(NSString*)message
                     duration:(NSTimeInterval)duration;
 
++ (void)showInViewController:(UIViewController*)viewController
+                   tintColor:(UIColor*)tintColor
+               textAlignment:(NSTextAlignment)textAlignment
+                       image:(UIImage*)image
+           attributedMessage:(NSAttributedString*)message
+                    duration:(NSTimeInterval)duration;
+
 #pragma mark + creators
 
 + (CSNotificationView*)notificationViewWithParentViewController:(UIViewController*)viewController

@@ -28,9 +28,24 @@
                                      message:@"A critical error happened."];
 }
 - (IBAction)showSuccess:(id)sender {
-    [CSNotificationView showInViewController:self.navigationController
-                                       style:CSNotificationViewStyleSuccess
-                                     message:@"Great, it works."];
+//    [CSNotificationView showInViewController:self.navigationController
+//                                       style:CSNotificationViewStyleSuccess
+//                                     message:@"Great, it works."];
+  
+  NSString *successHeader = @"Success!";
+  NSString *subtext = @"\n19 Points have been added";
+  NSString *fullText = [successHeader stringByAppendingString:subtext];
+  
+  NSMutableAttributedString *message = [[NSMutableAttributedString alloc] initWithString:fullText];
+  [message addAttribute:NSFontAttributeName value:[UIFont boldSystemFontOfSize:16.0f] range:[fullText rangeOfString:successHeader]];
+  [message addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:12.0f] range:[fullText rangeOfString:subtext]];
+  
+  [CSNotificationView showInViewController:self.navigationController
+                                 tintColor:[UIColor orangeColor]
+                             textAlignment:NSTextAlignmentLeft
+                                     image:nil
+                         attributedMessage:message
+                                  duration:5.0f];
 }
 
 - (IBAction)showCustom:(id)sender {

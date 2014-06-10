@@ -105,6 +105,32 @@ static NSString * kCSNavigationBarBoundsKeyPath = @"bounds";
                           duration:kCSNotificationViewDefaultShowDuration];
 }
 
++ (void)showInViewController:(UIViewController*)viewController
+                   tintColor:(UIColor*)tintColor
+               textAlignment:(NSTextAlignment)textAlignment
+                       image:(UIImage *)image
+           attributedMessage:(NSAttributedString*)message
+                    duration:(NSTimeInterval)duration
+{
+  
+  NSAssert(message, @"'message' must not be nil.");
+  
+  __block CSNotificationView* note = [[CSNotificationView alloc] initWithParentViewController:viewController];
+  note.tintColor = tintColor;
+  note.image = image;
+  note.textLabel.textAlignment = textAlignment;
+  note.textLabel.attributedText = message;
+  
+  void (^completion)() = ^{[note setVisible:NO animated:YES completion:nil];};
+  [note setVisible:YES animated:YES completion:^{
+    double delayInSeconds = duration;
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+      completion();
+    });
+  }];
+}
+
 #pragma mark + creators
 
 + (CSNotificationView*)notificationViewWithParentViewController:(UIViewController*)viewController
@@ -298,7 +324,7 @@ static NSString * kCSNavigationBarBoundsKeyPath = @"bounds";
 {
     [super layoutSubviews]; //Has to be called again after layout changes.
     
-    if (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_6_1) {
+    if (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_6_1 && self.textLabel.attributedText == nil) {
         //Manually adjustsFontSizeToFitWidth in iOS 6
 
         CGFloat defaultPointSize, minimumPointSize;
