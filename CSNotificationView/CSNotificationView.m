@@ -594,6 +594,7 @@ static NSString * kCSNavigationBarBoundsKeyPath = @"bounds";
 
 - (UIImage*)imageFromAlphaChannelOfImage:(UIImage*)image replacementColor:(UIColor*)tintColor
 {
+  return image;
     if (!image) return nil;
     NSParameterAssert([tintColor isKindOfClass:[UIColor class]]);
  
